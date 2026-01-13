@@ -32,6 +32,8 @@ const Login = () => {
 
       if (res.data.success) {
         dispatch(setAuthUser(res.data.user));
+        console.log("REDUX USER SET:", res.data.user);
+
         toast.success(res.data.message);
         navigate("/");
       }
