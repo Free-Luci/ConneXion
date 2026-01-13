@@ -28,8 +28,7 @@ const Login = () => {
         setInput({ ...input, [e.target.name]: e.target.value });
         
     }
-    // const signupHandler = async (e) => {
-        const loginHandler = async (e) => {
+    const signupHandler = async (e) => {
         e.preventDefault();
         // console.log(input);
         try {
@@ -65,10 +64,10 @@ const Login = () => {
         if(user){
             navigate('/');
         }
-    },[user, navigate])
+    },[user, navigate]);
     return (
         <div className='flex items-center w-screen h-screen justify-center'>
-            <form onSubmit={loginHandler} className='shadow-lg flex flex-col gap-5 p-8'>
+            <form onSubmit={signupHandler} className='shadow-lg flex flex-col gap-5 p-8'>
                 <div className='my-1'>
                     <h1 className='text-center font-bold text-xl'>ConneXion</h1>
                     <p className='text-sm text-center'>Login to see photos & videos from your frind</p>
