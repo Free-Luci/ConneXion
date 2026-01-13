@@ -23,8 +23,8 @@ app.use(urlencoded({ extended: true }));
 // -------------------- CORS (FINAL & SAFE) --------------------
 const allowedOrigins = [
   "http://localhost:5173",
-  // "https://conne-xion-7n7ewcmur-free-lucis-projects.vercel.app", // frontend render URL
-  "https://conne-xion.vercel.app"
+  "https://conne-xion-7n7ewcmur-free-lucis-projects.vercel.app", // frontend render URL
+  // "https://conne-xion.vercel.app"
 ].filter(Boolean); // 🔥 removes undefined safely
 
 // app.use(
