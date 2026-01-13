@@ -1,75 +1,59 @@
 import express, { urlencoded } from "express";
 import cors from "cors";
-import cookeiParser from "cookie-parser";
-import dotenv from "dotenv"
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.js";
 import postRoute from "./routes/post.js";
 import messageRoute from "./routes/message.js";
 import bodyParser from "body-parser";
-import { app,server } from "./socket/socket.js";
+import { app, server } from "./socket/socket.js";
 import path from "path";
 
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env"),});
+const port = process.env.PORT || 3000;
 
-// const app=express();
-const port=process.env.PORT || 8000;
-
-const __dirname = path.resolve();
-
-
-// app.get("/",(req,res)=>{
-//     return res.status(200).json({
-//         message:"I'm coming from backend",
-//         success:true,
-//     })
-// })
-
-//middlewares
+// -------------------- MIDDLEWARES --------------------
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cookeiParser());
-app.use(urlencoded({extended:true}));
+app.use(cookieParser());
+app.use(urlencoded({ extended: true }));
 
+// -------------------- CORS (FINAL & SAFE) --------------------
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.URL,
-];
+  process.env.URL, // frontend render URL
+].filter(Boolean); // 🔥 removes undefined safely
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
-app.options("*", cors());
+// ❌ REMOVE THIS (very important)
+// app.options("*", cors());
 
+// -------------------- ROUTES --------------------
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/post", postRoute);
+app.use("/api/v1/message", messageRoute);
 
-//route api
-app.use("/api/v1/user",userRoute); 
-app.use("/api/v1/post",postRoute); 
-app.use("/api/v1/message",messageRoute);
-
-
-
-
-//for deployment
-app.use(express.static(path.join(__dirname,"frontend/dist")));
-app.get("*",(req,res)=>{
-    res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"));
-})
-
-
-app.get("/abc",(req,res)=>{
-    res.send(" hello I am root you contacted the root path");
+// -------------------- HEALTH CHECK --------------------
+app.get("/health", (req, res) => {
+  res.status(200).json({ success: true, message: "Backend running" });
 });
-server.listen(port,()=>{
-    connectDB();
-    console.log(`server listen at port ${port}`);
-})
+
+// -------------------- SERVER --------------------
+server.listen(port, () => {
+  connectDB();
+  console.log(`🚀 Server listening on port ${port}`);
+});
