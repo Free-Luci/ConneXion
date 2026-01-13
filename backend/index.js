@@ -24,31 +24,53 @@ app.use(urlencoded({ extended: true }));
 const allowedOrigins = [
   "http://localhost:5173",
   "https://conne-xion-7n7ewcmur-free-lucis-projects.vercel.app", // frontend render URL
-  // "https://conne-xion.vercel.app"
+  "https://conne-xion.vercel.app",
 ].filter(Boolean); // 🔥 removes undefined safely
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//        return callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
 // app.use(cors({
   // origin: allowedOrigins,
   // credentials: true,
   //     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 // }));
 
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow server-to-server, curl, postman
+      if (!origin) return callback(null, true);
 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // ❌ DO NOT THROW ERROR
+      return callback(null, false);
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// handle preflight
 app.options("*", cors());
+
+
+
 
 // -------------------- ROUTES --------------------
 app.use("/api/v1/user", userRoute);
