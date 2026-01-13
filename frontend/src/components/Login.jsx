@@ -52,6 +52,11 @@ const Login = () => {
       navigate("/");
     }
   }, [user, navigate]);
+  useEffect(() => {
+  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("SOCKET URL:", import.meta.env.VITE_SOCKET_URL);
+}, []);
+
 
   return (
     <div className="flex items-center w-screen h-screen justify-center">
