@@ -42,5 +42,10 @@ ConneXion is a full-stack social media web application inspired by Instagram, bu
 
 
 ## 🌐 Live Demo
+https://conne-xion.vercel.app/login
+
+## Test case
+emai-test12345@gmail.com
+password- est12345@gmail.com
 
 ---
