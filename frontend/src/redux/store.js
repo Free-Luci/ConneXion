@@ -19,7 +19,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  // blacklist: ["chat"], // 🔥 optional but recommended
+  blacklist: ["chat"], // 🔥 optional but recommended
   whitelist: ["auth"], // 🔥 ONLY auth persists
 };
 
