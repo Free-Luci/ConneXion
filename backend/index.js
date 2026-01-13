@@ -48,7 +48,7 @@ app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
 // -------------------- HEALTH CHECK --------------------
-app.get("/health", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "Backend running" });
 });
 
